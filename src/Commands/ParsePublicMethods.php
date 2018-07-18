@@ -9,6 +9,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ParsePublicMethods extends Command
 {
@@ -50,6 +51,9 @@ class ParsePublicMethods extends Command
         $methods = $parser->getPublicMethods($classes);
 
         $this->printMethodsList($methods);
+
+        $fileSystem = new Filesystem();
+        $fileSystem->remove([static::DOWNLOADS_PATH, static::FILES_FROM_ARCHIVES_PATH]);
     }
 
     public function printMethodsList(array $methods): void

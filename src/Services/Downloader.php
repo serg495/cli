@@ -1,6 +1,5 @@
 <?php namespace App\Services;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 
 class Downloader
