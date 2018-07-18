@@ -16,15 +16,11 @@ class ParsePublicMethods extends Command
     const FILES_FROM_ARCHIVES_PATH = 'content';
     const PUBLIC_METHODS_PATTERN = '/public\s(static\s)?function\s(?P<methodName>(\w*))/';
 
-
     /** @var ProgressBar */
     protected $progressBar;
 
     /** @var OutputInterface */
     protected $output;
-
-    /** @var array */
-    protected $repositories;
 
     protected function configure()
     {
@@ -54,7 +50,7 @@ class ParsePublicMethods extends Command
         system('rm -R ' . static::FILES_FROM_ARCHIVES_PATH);
     }
 
-    public function getUrl(string $repository)
+    public function getUrl(string $repository) : string
     {
         return "https://github.com/${repository}/archive/master.zip";
     }
@@ -74,8 +70,10 @@ class ParsePublicMethods extends Command
                 'progress' => [$this, 'onProgress']
             ]);
 
-            $this->output->writeln('');
-            $this->output->writeln("${repository} downloaded");
+            $this->output->writeln([
+                '',
+                "${repository} <info>downloaded</info>"
+            ]);
         }
     }
 
@@ -134,7 +132,7 @@ class ParsePublicMethods extends Command
             ->name('*.php');
     }
 
-    public function getPublicMethods(Finder $finder)
+    public function getPublicMethods(Finder $finder) : void
     {
         foreach ($finder as $fileInfo) {
 
@@ -142,9 +140,16 @@ class ParsePublicMethods extends Command
             $content = $fileInfo->getContents();
             $methods = $this->parseMethodsName($content);
 
-            $this->output->writeln("<info>$path</info>");
+            $this->output->writeln([
+                '<info>__________________________________________________________________________________________</info>',
+                "<fg=red> $path </>",
+                '',
+            ]);
 
             $this->getMethodsNameList($methods);
+            $this->output->writeln(
+                '<info>__________________________________________________________________________________________</info>'
+            );
         }
     }
 
@@ -155,7 +160,7 @@ class ParsePublicMethods extends Command
         return $matches['methodName'];
     }
 
-    public function getMethodsNameList(array $methods)
+    public function getMethodsNameList(array $methods) : void
     {
         foreach ($methods as $method) {
             $this->output->writeln("\t ${method}");
