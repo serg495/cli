@@ -3,7 +3,7 @@
 
 require 'vendor/autoload.php';
 
-use App\ParsePublicMethods;
+use App\Commands\ParsePublicMethods;
 use Symfony\Component\Console\Application;
 
 $app = new Application('cli', 1.0);
