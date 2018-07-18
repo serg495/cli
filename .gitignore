@@ -1,0 +1,5 @@
+vendor
+content
+uploads
+.idea
+composer.lock
